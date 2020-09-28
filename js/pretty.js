@@ -65,9 +65,6 @@ var makeTranslateString = function(x,y)
 //xScale and yScale are the scales for the x and y scale.
 var drawAxes = function(graphDim,margins,xScale,yScale)
 {
-console.log(graphDim,"graphDim")
-    console.log(margins,"margins")
-     console.log(margins.left,"margins left")
     
     var xAxis = d3.axisBottom(xScale);
    var yAxis = d3.axisLeft(yScale);
@@ -82,7 +79,6 @@ console.log(graphDim,"graphDim")
 .attr("transform","translate("+margins.left+","
              +(margins.top)+")")
        .call(yAxis)
-    console.log("hello")
 }   
 //    
 
@@ -146,16 +142,17 @@ var legend = d3.select("svg")
              })
         .attr("transform",function(categories,index)
               {
-                return "translate(0,"+index*20+")";
+                return "translate(0,"+index*30+")";
+            
               })
               
         entries.append("rect")
-                .attr("width",10)
+                .attr("width",15)
                 .attr("height",10)
     
         entries.append("text")
                 .text(function(categories){return categories.name;})
-                .attr("x",15)
+                .attr("x",20)
                 .attr("y",10)
 }
 //sets up several important variables and calls the functions for the visualization.
@@ -173,7 +170,7 @@ var initGraph = function(counties)
             width:screen.width-margins.left-margins.right,
             height:screen.height - margins.top-margins.bottom
         }
-    console.log(graph);
+;
     
     d3.select("svg")
     .attr("width",screen.width)
@@ -194,7 +191,6 @@ var initGraph = function(counties)
     var yScale = d3.scaleLinear()
         .domain([0,1])
         .range([graph.height,0])
-    console.log("here",margins.left)
     drawAxes(graph,margins,xScale,yScale);
     drawPlot(counties,target,xScale,yScale);
     drawLabels(graph,margins);
