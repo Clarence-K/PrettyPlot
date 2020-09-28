@@ -65,20 +65,21 @@ var makeTranslateString = function(x,y)
 //xScale and yScale are the scales for the x and y scale.
 var drawAxes = function(graphDim,margins,xScale,yScale)
 {
-console.log(graphDim)
-    console.log(margins)
-    console.log(screen)
+console.log(graphDim,"graphDim")
+    console.log(margins,"margins")
+     console.log(margins.left,"margins left")
+    
     var xAxis = d3.axisBottom(xScale);
    var yAxis = d3.axisLeft(yScale);
   
   var axes = d3.select("svg")
       .append("g")
    axes.append("g")
-      .attr("transform","translate("+margins.left+","
-            +(margins.bottom+graphDim.height)+")")
+.attr("transform","translate("+margins.left+","
+  +(margins.top+graphDim.height)+")")
        .call(xAxis)
   axes.append("g")
-        .attr("transform","translate("+margins.left+","
+.attr("transform","translate("+margins.left+","
              +(margins.top)+")")
        .call(yAxis)
     console.log("hello")
@@ -98,7 +99,7 @@ var drawLabels = function(graphDim,margins)
         .classed("title", true)
         .attr("text-anchor", "middle")
         .attr("x", margins.left+(graphDim.width/2))
-        .attr("y", margins.top+(10))
+        .attr("y", margins.top+(8))
     
     labels.append("text")
         .text("Percentage Voting for Trump")
@@ -111,18 +112,59 @@ var drawLabels = function(graphDim,margins)
         .classed("label", true)
         .attr("text-anchor", "middle")
         .attr("x", margins.left+(graphDim.width/2))
-        .attr("y", margins.top+(graphDim.height)+(15))
+        .attr("y", margins.top+(graphDim.height)+(35))
     
     
     
+}
+var createLegend = function(graphDim,margins)
+{
+      var categories = [
+       {
+           class:"lessCollege",
+           name:"Less College"
+       },
+       {
+           class:"unemployment",
+           name:"High unemployment"
+       }
+          ]
+var legend = d3.select("svg")
+        .append("g")
+        .classed("legend",true)
+        .attr("transform","translate("+
+              (graphDim.width+55) +","+
+             (margins.top+10)+")");
+    
+    var entries = legend.selectAll("g")
+        .data(categories)
+        .enter()
+        .append("g")
+        .attr("class",function(categories)
+             {
+                return (categories.class);
+             })
+        .attr("transform",function(categories,index)
+              {
+                return "translate(0,"+index*20+")";
+              })
+              
+        entries.append("rect")
+                .attr("width",10)
+                .attr("height",10)
+    
+        entries.append("text")
+                .text(function(categories){return categories.name;})
+                .attr("x",15)
+                .attr("y",10)
 }
 //sets up several important variables and calls the functions for the visualization.
 var initGraph = function(counties)
 {
     //size of screen
-    var screen = {width:800,height:800}
+    var screen = {width:900,height:900}
     //how much space on each side
-    var margins = {left:30,right:20,top:20,bottom:30}
+    var margins = {left:55,right:170,top:20,bottom:40}
     
     
     
@@ -152,11 +194,11 @@ var initGraph = function(counties)
     var yScale = d3.scaleLinear()
         .domain([0,1])
         .range([graph.height,0])
-    console.log("here")
-    drawAxes(margins,graph,xScale,yScale);
+    console.log("here",margins.left)
+    drawAxes(graph,margins,xScale,yScale);
     drawPlot(counties,target,xScale,yScale);
     drawLabels(graph,margins);
-    drawLegend(graph,margins);
+    createLegend(graph,margins);
     
     
     
