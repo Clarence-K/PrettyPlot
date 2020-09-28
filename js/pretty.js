@@ -1,7 +1,3 @@
-
-
-
-
 //counties is the array of data
 //target is the selection of the g element to place the graph in
 //xscale,yscale are the x and y scales.
@@ -67,48 +63,64 @@ var makeTranslateString = function(x,y)
 //graphDim is an object that describes the width and height of the graph area.
 //margins is an object that describes the space around the graph
 //xScale and yScale are the scales for the x and y scale.
-var drawAxes = function(graphDim,margins,
-                         xScale,yScale)
+var drawAxes = function(graphDim,margins,xScale,yScale)
 {
-   
- 
-}
-
+console.log(graphDim)
+    console.log(margins)
+    console.log(screen)
+    var xAxis = d3.axisBottom(xScale);
+   var yAxis = d3.axisLeft(yScale);
+  
+  var axes = d3.select("svg")
+      .append("g")
+   axes.append("g")
+      .attr("transform","translate("+margins.left+","
+            +(margins.bottom+graphDim.height)+")")
+       .call(xAxis)
+  axes.append("g")
+        .attr("transform","translate("+margins.left+","
+             +(margins.top)+")")
+       .call(yAxis)
+    console.log("hello")
+}   
+//    
 
 //graphDim -object that stores dimensions of the graph area
 //margins - objedct that stores the size of the margins
 var drawLabels = function(graphDim,margins)
 {
+    var labels = d3.select("svg")
+        .append("g")
+        .classed("labels", true)
+        
+    labels.append("text")
+        .text("Trump Support")
+        .classed("title", true)
+        .attr("text-anchor", "middle")
+        .attr("x", margins.left+(graphDim.width/2))
+        .attr("y", margins.top+(10))
+    
+    labels.append("text")
+        .text("Percentage Voting for Trump")
+        .classed("label", true)
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate(18," + (graphDim.height/2)+") rotate(270) ")
+    
+    labels.append("text")
+        .text("Percent White")
+        .classed("label", true)
+        .attr("text-anchor", "middle")
+        .attr("x", margins.left+(graphDim.width/2))
+        .attr("y", margins.top+(graphDim.height)+(15))
+    
+    
     
 }
-
-
-var drawLegend = function(graphDim,margins)
-{
-    
- 
-   var categories = [
-       {
-           class:"lessCollege",
-           name:"Less College"
-       },
-       {
-           class:"unemployment",
-           name:"High unemployment"
-       }
-    ]
-
-
-    
-    
-    
-}
-
 //sets up several important variables and calls the functions for the visualization.
 var initGraph = function(counties)
 {
     //size of screen
-    var screen = {width:800,height:600}
+    var screen = {width:800,height:800}
     //how much space on each side
     var margins = {left:30,right:20,top:20,bottom:30}
     
@@ -140,8 +152,8 @@ var initGraph = function(counties)
     var yScale = d3.scaleLinear()
         .domain([0,1])
         .range([graph.height,0])
-    
-    drawAxes(graph,margins,xScale,yScale);
+    console.log("here")
+    drawAxes(margins,graph,xScale,yScale);
     drawPlot(counties,target,xScale,yScale);
     drawLabels(graph,margins);
     drawLegend(graph,margins);
